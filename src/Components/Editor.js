@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import { Editor, EditorState, RichUtils } from "draft-js";
 import "draft-js/dist/Draft.css";
-import Axios from "axios";
+import axios from "axios";
 
 function MyEditor() {
   const [editorState, setEditorState] = useState(() =>
@@ -10,24 +9,6 @@ function MyEditor() {
   );
 
   const [filesState, setFiles] = useState(null);
-
-  // const FileList = () => {
-  //   console.log(filesState);
-  //   return (
-  //     <ul>
-  //       {filesState !== null
-  //         ? filesState.map((e) => {
-  //             return (
-  //               <li>
-  //                 <span>{e.name}</span>
-  //                 <span>{e.lastModified}</span>
-  //               </li>
-  //             );
-  //           })
-  //         : null}
-  //     </ul>
-  //   );
-  // };
 
   // 키보드 단축키 기능
   function handleKeyCommand(command, editorState) {
@@ -52,8 +33,19 @@ function MyEditor() {
 
   const fileSelectedHandler = () => {
     const filesData = new FormData();
-    filesData.append("image", filesState.name, filesState.lastModified);
-    console.log(filesState);
+    filesData.append(
+      "image",
+      filesState.filesState,
+      filesState.filesState.name
+    );
+    axios
+      .post("주소", filesData)
+      .then((ref) => {
+        return console.log(ref);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -67,7 +59,6 @@ function MyEditor() {
       <form method="post" encType="multipart/form-data">
         <input type="file" onChange={fileUpload} />
         <input type="button" value="추가하기" onClick={fileSelectedHandler} />
-        {/* <FileList /> */}
       </form>
     </>
   );
