@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Editor, EditorState, RichUtils } from "draft-js";
 import "draft-js/dist/Draft.css";
 import axios from "axios";
@@ -9,6 +9,8 @@ function MyEditor() {
   );
 
   const [filesState, setFiles] = useState(null);
+
+  const [title, setTitle] = useState(0);
 
   // 키보드 단축키 기능
   function handleKeyCommand(command, editorState) {
@@ -48,6 +50,10 @@ function MyEditor() {
       });
   };
 
+  useEffect(() => {
+    document.title = `클릭 횟수 ${title}번 사이트`;
+  });
+
   return (
     <>
       <button onClick={_onBoldClick}>Bold</button>
@@ -60,6 +66,8 @@ function MyEditor() {
         <input type="file" onChange={fileUpload} />
         <input type="button" value="추가하기" onClick={fileSelectedHandler} />
       </form>
+      <br />
+      <button onClick={() => setTitle(title + 1)}>title change button</button>
     </>
   );
 }
